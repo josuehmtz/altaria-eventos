@@ -20,6 +20,13 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Fotos originales: solo las usa la vista previa del panel /admin
+[[headers]]
+  for = "/assets-src/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    X-Robots-Tag = "noindex"
+
 # Panel de administración: siempre la versión más reciente de la configuración
 [[headers]]
   for = "/admin/*"

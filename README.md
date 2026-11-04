@@ -25,7 +25,8 @@ Construido con **React 19 + TypeScript + Vite**, CSS Modules y design tokens.
 ## Estructura
 
 ```
-assets-src/              Fotografías originales (aquí sube el panel /admin)
+assets-src/              Fotografías originales (aquí sube el panel /admin; se publican para su vista previa)
+assets-brand/            Logo original (fuera de la biblioteca del panel)
 public/admin/            Panel de administración (Decap CMS): index.html + config.yml
 public/images/           ⚙️  WebP generados con hash (no se versionan)
 scripts/optimize-images.mjs

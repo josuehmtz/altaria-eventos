@@ -94,7 +94,7 @@ for (const src of sources) {
 }
 
 // Logo e íconos (archivos fijos)
-const logoSrc = path.join(root, 'assets-src', 'logo.jpg')
+const logoSrc = path.join(root, 'assets-brand', 'logo.jpg')
 const logo = sharp(logoSrc)
 
 await logo

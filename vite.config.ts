@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import { readFileSync } from 'node:fs'
+import { cpSync, readFileSync } from 'node:fs'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 
@@ -19,6 +19,25 @@ const CSP = [
   "base-uri 'self'",
   "form-action 'self'",
 ].join('; ')
+
+/**
+ * Publica las fotos originales en /assets-src/ para que el panel /admin
+ * pueda mostrar la vista previa de cada imagen. El sitio público no las usa
+ * (sirve las versiones WebP optimizadas de /images/).
+ */
+function publishOriginals(): Plugin {
+  let outDir = 'dist'
+  return {
+    name: 'altaria-publish-originals',
+    apply: 'build',
+    configResolved(config) {
+      outDir = config.build.outDir
+    },
+    closeBundle() {
+      cpSync('assets-src', `${outDir}/assets-src`, { recursive: true })
+    },
+  }
+}
 
 /** Precarga la imagen del hero (sus nombres llevan hash) y agrega la CSP. */
 function siteHtml(): Plugin {
@@ -64,7 +83,7 @@ function siteHtml(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), siteHtml()],
+  plugins: [react(), siteHtml(), publishOriginals()],
   build: {
     target: 'es2022',
     cssCodeSplit: true,
