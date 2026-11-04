@@ -1,6 +1,7 @@
 # Configuración de despliegue en Netlify
 [build]
-  # Si lint, formato o pruebas fallan, Netlify no publica
+  # Optimiza imágenes, verifica (lint, formato, pruebas) y construye.
+  # Si algo falla, Netlify no publica y el sitio en vivo no cambia.
   command = "npm run check && npm run build"
   publish = "dist"
 
@@ -8,19 +9,27 @@
   # Vite 8 requiere Node >= 22.12
   NODE_VERSION = "24"
 
-# Archivos con hash en el nombre: caché de 1 año
+# Archivos con hash en el nombre (código e imágenes): caché de 1 año
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Imágenes optimizadas (sin hash): caché de 30 días
 [[headers]]
   for = "/images/*"
   [headers.values]
-    Cache-Control = "public, max-age=2592000"
+    Cache-Control = "public, max-age=31536000, immutable"
 
-# Cabeceras de seguridad para todo el sitio
+# Panel de administración: siempre la versión más reciente de la configuración
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    X-Robots-Tag = "noindex"
+
+# Cabeceras de seguridad para todo el sitio.
+# La Content-Security-Policy del sitio va como <meta> (ver vite.config.ts)
+# para que /admin pueda usar la suya.
 [[headers]]
   for = "/*"
   [headers.values]
@@ -28,4 +37,3 @@
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; frame-src https://www.google.com https://maps.google.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

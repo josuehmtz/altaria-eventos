@@ -18,22 +18,28 @@ Construido con **React 19 + TypeScript + Vite**, CSS Modules y design tokens.
 | `npm test`        | Pruebas unitarias y de componentes (Vitest + Testing Library) |
 | `npm run lint`    | Lint con Oxlint (reglas de React y hooks)                     |
 | `npm run format`  | Formatea con Prettier                                         |
-| `npm run images`  | Regenera las imágenes optimizadas desde `assets-src/`         |
+| `npm run images`  | Optimiza las fotos de `src/content/images.json` (automático)  |
+| `npm run check`   | Lint + formato + pruebas (lo que corre CI y Netlify)          |
+| `npm run cms`     | Backend local para probar el panel en `/admin/index.html`     |
 
 ## Estructura
 
 ```
-assets-src/              Fotografías originales (fuente de verdad)
-public/images/           WebP responsivos generados (480 / 960 / 1600 px)
+assets-src/              Fotografías originales (aquí sube el panel /admin)
+public/admin/            Panel de administración (Decap CMS): index.html + config.yml
+public/images/           ⚙️  WebP generados con hash (no se versionan)
 scripts/optimize-images.mjs
 src/
   components/
     layout/              Header (menú móvil accesible), Footer
     sections/            Hero, About, Events, Experience, Quote, Gallery + Lightbox, Process, Contact
     ui/                  ResponsiveImage, Reveal, SectionHeading, Ornament, Icon, Logo, WhatsAppFab
+  content/
+    images.json          🖼️  Qué foto va en cada sección y la galería (lo edita el panel)
   data/
-    site.ts              ✏️  Todo el contenido editable: textos, contacto, galería
-    images.generated.ts  Manifiesto de imágenes (no editar a mano)
+    site.ts              ✏️  Textos, contacto, servicios, pasos
+    images.ts            Tipos y acceso a imágenes + manifiesto
+    images.manifest.json ⚙️  Generado (dimensiones, placeholder)
   hooks/                 useScrolled, useInView, useActiveSection
   styles/                tokens.css (paleta, tipografía, espaciado) y global.css
   utils/                 WhatsApp, validación del formulario, rutas de imágenes
@@ -41,13 +47,41 @@ src/
 
 ## Cómo editar contenido
 
-- **Textos, teléfono, dirección, tipos de evento, galería:** `src/data/site.ts`.
+- **Fotos y galería:** desde el panel **/admin** (ver abajo).
+- **Textos, teléfono, dirección, servicios:** `src/data/site.ts`.
 - **Colores y tipografía:** `src/styles/tokens.css`.
-- **Agregar fotos:** copia el JPG a `assets-src/`, ejecuta `npm run images` y añádelo a `gallery` en `site.ts` (el nombre del archivo, sin extensión, queda tipado).
+
+## Panel de administración de imágenes (/admin)
+
+https://altaria-eventos.netlify.app/admin/ — basado en [Decap CMS](https://decapcms.org).
+
+Permite cambiar la foto de cada sección (portada, nosotros, experiencia, fondo de la frase) y
+administrar la galería: subir, quitar, reordenar (arrastrando), y editar título y descripción.
+
+**Cómo funciona:** al pulsar _Publicar_, el panel guarda un commit en GitHub
+(foto original en `assets-src/` + cambios en `src/content/images.json`). Netlify detecta el commit,
+optimiza las fotos (WebP 480/960/1600 px), corre las verificaciones y publica en ~1–2 minutos.
+Si algo falla (p. ej. falta una descripción), no se publica y el sitio sigue como estaba.
+
+**Configuración inicial (una sola vez):**
+
+1. En GitHub → _Settings → Developer settings → OAuth Apps → New OAuth App_:
+   - Homepage URL: `https://altaria-eventos.netlify.app`
+   - Authorization callback URL: `https://api.netlify.com/auth/done`
+2. Copia el _Client ID_ y genera un _Client secret_.
+3. En Netlify → _Project configuration → Access & security → OAuth → Install provider_ → GitHub,
+   pega el Client ID y el Client secret.
+
+**Dar acceso a otra persona:** necesita una cuenta gratuita de GitHub y ser agregada como
+colaboradora del repositorio (_Settings → Collaborators_, permiso _Write_). Después entra a /admin
+y pulsa _Iniciar sesión con GitHub_.
+
+**Probar el panel en local:** `npm run cms` en una terminal y `npm run dev` en otra; abre
+`http://localhost:5173/admin/index.html`. Los cambios se escriben en tus archivos locales.
 
 ## Buenas prácticas aplicadas
 
-- **Rendimiento:** imágenes WebP con `srcset`/`sizes`, `width`/`height` para evitar CLS, placeholder borroso (LQIP),
+- **Rendimiento:** imágenes WebP con `srcset`/`sizes` y nombre con hash (caché inmutable), `width`/`height` para evitar CLS, placeholder borroso (LQIP),
   lazy-loading, precarga de la imagen del hero, fuentes auto-alojadas con `font-display: swap`.
 - **Accesibilidad:** HTML semántico, un solo `h1`, _skip link_, `aria-current` en la navegación, foco visible,
   menú móvil con Escape y gestión de foco, visor de galería con `<dialog>` nativo (trampa de foco y teclado),

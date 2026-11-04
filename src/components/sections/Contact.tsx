@@ -72,6 +72,11 @@ export function Contact() {
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
+
+          <p className={styles.parking}>
+            <Icon name="car" className={styles.parkingIcon} />
+            {contact.parking}
+          </p>
         </Reveal>
 
         <Reveal delay={150}>

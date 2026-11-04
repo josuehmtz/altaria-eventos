@@ -1,3 +1,4 @@
+import { siteImages } from '../../data/images'
 import { amenities } from '../../data/site'
 import { Icon } from '../ui/Icon'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
@@ -12,15 +13,13 @@ export function About() {
         <Reveal className={styles.media}>
           <div className={styles.frame}>
             <ResponsiveImage
-              name="salon-interior"
-              alt="Salón principal de Altaria con cielo de tela blanca, corona floral y mesas montadas"
+              image={siteImages.aboutMain}
               sizes="(min-width: 960px) 40vw, 90vw"
               className={styles.main}
             />
           </div>
           <ResponsiveImage
-            name="escenario"
-            alt="Escenario con audio e iluminación profesional y letras iluminadas"
+            image={siteImages.aboutAccent}
             sizes="(min-width: 960px) 18vw, 40vw"
             className={styles.accent}
           />

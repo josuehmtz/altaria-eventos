@@ -2,5 +2,7 @@ dist
 node_modules
 public
 assets-src
-src/data/images.generated.ts
+src/data/images.manifest.json
 package-lock.json
+# Contenido administrado desde /admin
+src/content

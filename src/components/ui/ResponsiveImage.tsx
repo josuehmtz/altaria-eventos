@@ -1,10 +1,11 @@
 import type { CSSProperties } from 'react'
-import { imageManifest, type ImageName } from '../../data/images.generated'
-import { imageSrc, srcSetFor } from '../../utils/images'
+import { imageMeta, type ImageRef } from '../../data/images'
+import { defaultSrc, srcSetFor } from '../../utils/images'
 
 interface ResponsiveImageProps {
-  name: ImageName
-  alt: string
+  image: ImageRef
+  /** Sobrescribe el texto alternativo (usa "" para imágenes decorativas) */
+  alt?: string
   /** Atributo `sizes` según el ancho que ocupará la imagen en el layout */
   sizes?: string
   /** Para la imagen principal (LCP): sin lazy-loading y con prioridad alta */
@@ -14,25 +15,23 @@ interface ResponsiveImageProps {
 }
 
 export function ResponsiveImage({
-  name,
+  image,
   alt,
   sizes = '100vw',
   priority = false,
   className,
   style,
 }: ResponsiveImageProps) {
-  const meta = imageManifest[name]
-  const srcSet = srcSetFor(name)
-  const fallback = imageSrc(name, meta.widths.find((w) => w >= 960) ?? meta.widths[0] ?? 960)
+  const meta = imageMeta(image.src)
 
   return (
     <img
-      src={fallback}
-      srcSet={srcSet}
+      src={defaultSrc(image.src)}
+      srcSet={srcSetFor(image.src)}
       sizes={sizes}
       width={meta.width}
       height={meta.height}
-      alt={alt}
+      alt={alt ?? image.alt}
       loading={priority ? 'eager' : 'lazy'}
       decoding={priority ? 'sync' : 'async'}
       fetchPriority={priority ? 'high' : 'auto'}

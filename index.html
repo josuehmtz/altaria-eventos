@@ -28,16 +28,7 @@
     <meta property="og:image" content="/og-image.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Imagen principal: se precarga para mejorar el LCP -->
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      href="/images/fachada-noche-960.webp"
-      imagesrcset="/images/fachada-noche-480.webp 480w, /images/fachada-noche-960.webp 960w"
-      imagesizes="100vw"
-      fetchpriority="high"
-    />
+    <!-- La precarga de la imagen principal y la CSP las inyecta vite.config.ts -->
 
     <script type="application/ld+json">
       {
@@ -54,6 +45,9 @@
           "addressRegion": "Jalisco",
           "addressCountry": "MX"
         },
+        "amenityFeature": [
+          { "@type": "LocationFeatureSpecification", "name": "Estacionamiento", "value": true }
+        ],
         "sameAs": ["https://www.facebook.com/profile.php?id=100063661324473"]
       }
     </script>

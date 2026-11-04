@@ -26,3 +26,11 @@ dist-ssr
 # Claude Code local
 .claude/settings.local.json
 .netlify
+
+# Generados por scripts/optimize-images.mjs
+public/images/
+public/og-image.jpg
+public/logo-512.png
+public/apple-touch-icon.png
+src/data/images.manifest.json
+public/logo-640.webp

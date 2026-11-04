@@ -26,7 +26,7 @@ export function Gallery() {
 
         <ul role="list" className={styles.grid}>
           {gallery.map((item, i) => (
-            <Reveal as="li" key={item.image} delay={(i % 4) * 80} className={styles.item}>
+            <Reveal as="li" key={`${item.src}-${i}`} delay={(i % 4) * 80} className={styles.item}>
               <button
                 type="button"
                 className={styles.button}
@@ -34,8 +34,7 @@ export function Gallery() {
                 aria-label={`Ampliar imagen: ${item.caption}`}
               >
                 <ResponsiveImage
-                  name={item.image}
-                  alt={item.alt}
+                  image={item}
                   sizes="(min-width: 1100px) 25vw, (min-width: 640px) 33vw, 50vw"
                   className={styles.image}
                 />

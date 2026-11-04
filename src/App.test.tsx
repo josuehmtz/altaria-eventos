@@ -12,6 +12,12 @@ describe('App', () => {
     }
   })
 
+  it('indica que el salón cuenta con estacionamiento', () => {
+    render(<App />)
+    expect(screen.getByText('Estacionamiento para invitados')).toBeInTheDocument()
+    expect(screen.getByText(/Contamos con estacionamiento/)).toBeInTheDocument()
+  })
+
   it('todas las imágenes tienen texto alternativo definido', () => {
     render(<App />)
     for (const img of document.querySelectorAll('img')) {

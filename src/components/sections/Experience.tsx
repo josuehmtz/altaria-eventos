@@ -24,8 +24,7 @@ export function Experience() {
             <article key={item.title} className={styles.row}>
               <Reveal className={styles.media}>
                 <ResponsiveImage
-                  name={item.image}
-                  alt={item.alt}
+                  image={item.image}
                   sizes="(min-width: 900px) 50vw, 100vw"
                   className={styles.image}
                 />

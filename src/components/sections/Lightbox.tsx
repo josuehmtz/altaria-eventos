@@ -1,11 +1,11 @@
 import { useEffect, useRef, type KeyboardEvent, type TouchEvent } from 'react'
-import type { ImageName } from '../../data/images.generated'
-import { Icon } from '../ui/Icon'
+import type { GalleryItem } from '../../data/images'
 import { largestSrc } from '../../utils/images'
+import { Icon } from '../ui/Icon'
 import styles from './Lightbox.module.css'
 
 interface LightboxProps {
-  items: ReadonlyArray<{ image: ImageName; alt: string; caption: string }>
+  items: ReadonlyArray<GalleryItem>
   index: number | null
   onChange: (index: number | null) => void
 }
@@ -62,8 +62,8 @@ export function Lightbox({ items, index, onChange }: LightboxProps) {
         <div className={styles.body} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           <figure className={styles.figure}>
             <img
-              key={item.image}
-              src={largestSrc(item.image)}
+              key={item.src}
+              src={largestSrc(item.src)}
               alt={item.alt}
               className={styles.image}
             />

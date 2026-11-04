@@ -30,6 +30,15 @@ const paths = {
   chevronRight: <path d="m9 18 6-6-6-6" />,
   expand: <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />,
   check: <path d="M20 6 9 17l-5-5" />,
+  car: (
+    <>
+      <path d="M5 17H3v-5l2-5h14l2 5v5h-2" />
+      <path d="M3 12h18" />
+      <circle cx="7.5" cy="17" r="2" />
+      <circle cx="16.5" cy="17" r="2" />
+      <path d="M9.5 17h5" />
+    </>
+  ),
 } as const
 
 export type IconName = keyof typeof paths

@@ -1,0 +1,114 @@
+# Configuración del panel de administración (Decap CMS) — https://decapcms.org/docs
+# Cada cambio guardado en el panel se convierte en un commit en GitHub;
+# Netlify lo detecta, optimiza las imágenes, verifica y publica (≈1–2 min).
+
+backend:
+  name: github
+  repo: josuehmtz/altaria-eventos
+  branch: main
+  commit_messages:
+    update: 'Admin: actualiza {{collection}}'
+    uploadMedia: 'Admin: sube imagen {{path}}'
+    deleteMedia: 'Admin: elimina imagen {{path}}'
+
+# Permite probar el panel en local con `npm run cms` (no aplica en producción)
+local_backend: true
+
+locale: es
+site_url: https://altaria-eventos.netlify.app
+display_url: https://altaria-eventos.netlify.app
+logo_url: /logo-512.png
+
+# Dónde se guardan las fotos subidas (las originales; el build genera versiones optimizadas)
+media_folder: assets-src
+public_folder: /assets-src
+
+collections:
+  - name: imagenes
+    label: Imágenes del sitio
+    description: Cambia las fotos de cada sección y administra la galería. Al publicar, el sitio se actualiza en 1–2 minutos.
+    editor:
+      preview: false
+    files:
+      - name: fotos
+        label: Fotos del sitio y galería
+        file: src/content/images.json
+        format: json
+        fields:
+          - label: Portada
+            name: hero
+            widget: object
+            collapsed: false
+            hint: Imagen de fondo de la parte superior. Usa una foto horizontal; se oscurece para que el texto se lea.
+            fields:
+              - &foto
+                label: Foto
+                name: src
+                widget: image
+                choose_url: false
+                # Sin flags de regex en Decap: se aceptan mayúsculas (.JPG de celular)
+                pattern:
+                  ['\.([jJ][pP][eE]?[gG]|[pP][nN][gG]|[wW][eE][bB][pP])$', 'La foto debe ser JPG, PNG o WebP.']
+              - { label: Texto alternativo, name: alt, widget: hidden, default: '' }
+
+          - label: Nosotros · foto principal
+            name: aboutMain
+            widget: object
+            collapsed: true
+            fields:
+              - *foto
+              - &alt
+                label: Descripción de la foto
+                name: alt
+                widget: string
+                hint: Describe brevemente lo que se ve (para personas con discapacidad visual y para Google).
+
+          - label: Nosotros · foto pequeña
+            name: aboutAccent
+            widget: object
+            collapsed: true
+            fields: [*foto, *alt]
+
+          - label: Experiencia · Decoración floral
+            name: experienceDecoration
+            widget: object
+            collapsed: true
+            fields: [*foto, *alt]
+
+          - label: Experiencia · Mesa de postres
+            name: experienceDesserts
+            widget: object
+            collapsed: true
+            fields: [*foto, *alt]
+
+          - label: Experiencia · Audio, iluminación y show
+            name: experienceShow
+            widget: object
+            collapsed: true
+            fields: [*foto, *alt]
+
+          - label: Fondo de la frase
+            name: quote
+            widget: object
+            collapsed: true
+            hint: Foto de fondo de la frase “Cuéntanos cómo lo soñaste…”. Se muestra oscurecida.
+            fields:
+              - *foto
+              - { label: Texto alternativo, name: alt, widget: hidden, default: '' }
+
+          - label: Galería
+            name: gallery
+            widget: list
+            label_singular: foto
+            add_to_top: true
+            collapsed: true
+            min: 1
+            summary: '{{fields.caption}}'
+            hint: Arrastra para cambiar el orden. Se recomiendan entre 8 y 16 fotos.
+            fields:
+              - *foto
+              - *alt
+              - label: Título corto
+                name: caption
+                widget: string
+                hint: Se muestra sobre la foto, por ejemplo “Mesa de postres”.

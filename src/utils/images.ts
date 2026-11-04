@@ -1,12 +1,20 @@
-import { imageManifest, type ImageName } from '../data/images.generated'
+import { imageMeta } from '../data/images'
 
-export const imageSrc = (name: ImageName, width: number) => `/images/${name}-${width}.webp`
+export const imageUrl = (src: string, width: number) => `${imageMeta(src).base}-${width}.webp`
 
-export const srcSetFor = (name: ImageName) =>
-  imageManifest[name].widths.map((w) => `${imageSrc(name, w)} ${w}w`).join(', ')
+export const srcSetFor = (src: string) =>
+  imageMeta(src)
+    .widths.map((w) => `${imageUrl(src, w)} ${w}w`)
+    .join(', ')
 
 /** Versión de mayor resolución disponible (para el visor de galería). */
-export function largestSrc(name: ImageName) {
-  const { widths } = imageManifest[name]
-  return imageSrc(name, widths[widths.length - 1] ?? 960)
+export function largestSrc(src: string) {
+  const { widths } = imageMeta(src)
+  return imageUrl(src, widths[widths.length - 1] ?? 960)
+}
+
+/** Versión mediana para el atributo `src` de respaldo. */
+export function defaultSrc(src: string) {
+  const { widths } = imageMeta(src)
+  return imageUrl(src, widths.find((w) => w >= 960) ?? widths[widths.length - 1] ?? 960)
 }

@@ -1,10 +1,70 @@
 /// <reference types="vitest/config" />
+import { readFileSync } from 'node:fs'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
+
+/**
+ * Content-Security-Policy del sitio público. Va como <meta> (solo en build,
+ * porque el modo dev de Vite usa scripts inline) para que /admin pueda
+ * tener una política distinta.
+ */
+const CSP = [
+  "default-src 'self'",
+  "img-src 'self' data:",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
+  "script-src 'self'",
+  'frame-src https://www.google.com https://maps.google.com',
+  "connect-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ')
+
+/** Precarga la imagen del hero (sus nombres llevan hash) y agrega la CSP. */
+function siteHtml(): Plugin {
+  return {
+    name: 'altaria-site-html',
+    transformIndexHtml: {
+      order: 'post',
+      handler(_html, ctx) {
+        const content = JSON.parse(readFileSync('src/content/images.json', 'utf8'))
+        const manifest = JSON.parse(readFileSync('src/data/images.manifest.json', 'utf8'))
+        const hero = manifest[content.hero.src] as { base: string; widths: number[] }
+        const srcset = hero.widths.map((w) => `${hero.base}-${w}.webp ${w}w`).join(', ')
+        const fallback = `${hero.base}-${hero.widths.find((w) => w >= 960) ?? hero.widths.at(-1)}.webp`
+
+        return [
+          {
+            tag: 'link',
+            injectTo: 'head',
+            attrs: {
+              rel: 'preload',
+              as: 'image',
+              type: 'image/webp',
+              href: fallback,
+              imagesrcset: srcset,
+              imagesizes: '100vw',
+              fetchpriority: 'high',
+            },
+          },
+          ...(ctx.server
+            ? []
+            : [
+                {
+                  tag: 'meta',
+                  injectTo: 'head-prepend' as const,
+                  attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP },
+                },
+              ]),
+        ]
+      },
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), siteHtml()],
   build: {
     target: 'es2022',
     cssCodeSplit: true,

@@ -1,3 +1,4 @@
+import { siteImages } from '../../data/images'
 import { tagline } from '../../data/site'
 import { whatsappUrl } from '../../utils/whatsapp'
 import { Icon } from '../ui/Icon'
@@ -9,7 +10,7 @@ export function Hero() {
     <section id="inicio" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.media}>
         <ResponsiveImage
-          name="fachada-noche"
+          image={siteImages.hero}
           alt=""
           priority
           sizes="100vw"
@@ -19,7 +20,7 @@ export function Hero() {
 
       <div className={`container ${styles.content}`}>
         <img
-          src="/images/logo-640.webp"
+          src="/logo-640.webp"
           alt="Altaria Eventos"
           width={640}
           height={640}
