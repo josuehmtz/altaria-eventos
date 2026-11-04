@@ -1,0 +1,27 @@
+.logo {
+  display: inline-grid;
+  justify-items: center;
+  line-height: 1;
+}
+
+.word {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.6em;
+  margin-right: -0.6em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}

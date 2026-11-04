@@ -1,0 +1,31 @@
+# Configuración de despliegue en Netlify
+[build]
+  # Si lint, formato o pruebas fallan, Netlify no publica
+  command = "npm run check && npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 requiere Node >= 22.12
+  NODE_VERSION = "24"
+
+# Archivos con hash en el nombre: caché de 1 año
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Imágenes optimizadas (sin hash): caché de 30 días
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# Cabeceras de seguridad para todo el sitio
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; frame-src https://www.google.com https://maps.google.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

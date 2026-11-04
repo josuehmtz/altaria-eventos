@@ -1,0 +1,6 @@
+dist
+node_modules
+public
+assets-src
+src/data/images.generated.ts
+package-lock.json
