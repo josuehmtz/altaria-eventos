@@ -14,5 +14,73 @@
       integrity="sha384-RWRzuHfiZSWCt3nEvG7B0v3cMgM1C2UuJmgBSL92GQh4uXmNSkbcthql/mNBqvjr"
       crossorigin="anonymous"
     ></script>
+    <script>
+      /*
+       * Corrige un bug de Decap: la vista previa de un campo de imagen pide la foto
+       * una sola vez al aparecer. Si la foto aún se está descargando, recibe un
+       * marcador vacío y nunca se actualiza. Este envoltorio vuelve a pedirla
+       * (cambiando la identidad de getAsset) mientras siga vacía, unas cuantas veces.
+       */
+      ;(function () {
+        var original = CMS.getWidget('image')
+        var RETRY_MS = [300, 800, 1500, 3000, 5000, 8000, 12000]
+        var isEmpty = function (asset) {
+          return !asset || asset.path === 'empty.svg'
+        }
+
+        var ImageControl = createClass({
+          getInitialState: function () {
+            return { attempt: 0 }
+          },
+          componentDidMount: function () {
+            this.schedule()
+          },
+          componentDidUpdate: function (prevProps) {
+            if (prevProps.value !== this.props.value) this.setState({ attempt: 0 }, this.schedule)
+          },
+          componentWillUnmount: function () {
+            clearTimeout(this.timer)
+          },
+          schedule: function () {
+            clearTimeout(this.timer)
+            var self = this
+            var delay = RETRY_MS[this.state.attempt]
+            var value = this.props.value
+            if (!value || typeof value !== 'string' || delay === undefined) return
+            this.timer = setTimeout(function () {
+              if (isEmpty(self.props.getAsset(value, self.props.field))) {
+                self.setState({ attempt: self.state.attempt + 1 }, self.schedule)
+              } else {
+                // Ya cargó: un último cambio de identidad para que la vista previa se redibuje
+                self.setState({ attempt: self.state.attempt + 1 })
+              }
+            }, delay)
+          },
+          getAsset: function () {
+            if (this.boundFor !== this.props.getAsset || this.boundAttempt !== this.state.attempt) {
+              var getAsset = this.props.getAsset
+              this.boundFor = getAsset
+              this.boundAttempt = this.state.attempt
+              this.bound = function (path, field) {
+                return getAsset(path, field)
+              }
+            }
+            return this.bound
+          },
+          render: function () {
+            return h(original.control, Object.assign({}, this.props, { getAsset: this.getAsset() }))
+          },
+        })
+
+        CMS.registerWidget({
+          name: 'image',
+          controlComponent: ImageControl,
+          previewComponent: original.preview,
+          schema: original.schema,
+          allowMapValue: original.allowMapValue,
+          globalStyles: original.globalStyles,
+        })
+      })()
+    </script>
   </body>
 </html>
