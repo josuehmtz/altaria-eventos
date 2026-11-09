@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import App from './App'
+import { gallery } from './data/site'
 
 describe('App', () => {
   it('renderiza un único h1 y todas las secciones navegables', () => {
@@ -46,19 +47,21 @@ describe('App', () => {
     )
   })
 
+  // La galería se edita desde /admin: la prueba no depende del número ni del orden de fotos.
   it('abre la galería y navega entre imágenes', async () => {
     const user = userEvent.setup()
+    const total = gallery.length
     render(<App />)
-    await user.click(screen.getByRole('button', { name: /Ampliar imagen: Salón principal/ }))
+    await user.click(screen.getAllByRole('button', { name: /^Ampliar imagen:/ })[0]!)
 
     const dialog = screen.getByRole('dialog', { name: 'Galería de imágenes' })
-    expect(within(dialog).getByText('2 / 8')).toBeInTheDocument()
+    expect(within(dialog).getByText(`1 / ${total}`)).toBeInTheDocument()
 
     await user.click(within(dialog).getByRole('button', { name: 'Imagen siguiente' }))
-    expect(within(dialog).getByText('3 / 8')).toBeInTheDocument()
+    expect(within(dialog).getByText(`${total > 1 ? 2 : 1} / ${total}`)).toBeInTheDocument()
 
     await user.click(within(dialog).getByRole('button', { name: 'Cerrar galería' }))
-    expect(within(dialog).queryByText(/\/ 8/)).not.toBeInTheDocument()
+    expect(within(dialog).queryByText(new RegExp(`/ ${total}$`))).not.toBeInTheDocument()
   })
 
   it('valida el formulario y abre WhatsApp con el mensaje', async () => {

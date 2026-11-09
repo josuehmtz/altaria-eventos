@@ -96,7 +96,7 @@ y pulsa _Iniciar sesión con GitHub_.
 - **Accesibilidad:** HTML semántico, un solo `h1`, _skip link_, `aria-current` en la navegación, foco visible,
   menú móvil con Escape y gestión de foco, visor de galería con `<dialog>` nativo (trampa de foco y teclado),
   formulario con errores asociados (`aria-invalid`, `aria-describedby`), respeto a `prefers-reduced-motion`.
-- **SEO:** `lang="es-MX"`, meta description, Open Graph, URL canónica, datos estructurados `EventVenue` (JSON-LD), `robots.txt`, `sitemap.xml`, manifest.
+- **SEO:** `lang="es-MX"`, meta description, Open Graph, URL canónica, datos estructurados `EventVenue` (JSON-LD), `robots.txt` y `sitemap.xml` (generados en el build con la dirección principal que define Netlify en `URL`), manifest.
 - **Código:** TypeScript estricto, componentes pequeños, contenido separado de la presentación, CSS Modules + tokens, pruebas.
 
 ## Contacto / formulario

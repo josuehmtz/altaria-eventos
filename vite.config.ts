@@ -1,7 +1,7 @@
 /// <reference types="vitest/config" />
 import { cpSync, readFileSync } from 'node:fs'
 import react from '@vitejs/plugin-react'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
 
 /**
  * Content-Security-Policy del sitio público. Va como <meta> (solo en build,
@@ -39,20 +39,65 @@ function publishOriginals(): Plugin {
   }
 }
 
-/** Precarga la imagen del hero (sus nombres llevan hash) y agrega la CSP. */
+/**
+ * Dirección pública del sitio. Netlify define `URL` con el dominio principal
+ * del proyecto: hoy altaria-eventos.netlify.app y, cuando se configure un
+ * dominio propio como principal, ese dominio (sin tocar el código).
+ */
+const SITE_URL = (process.env.URL || 'https://altaria-eventos.netlify.app').replace(/\/+$/, '')
+
+/** Genera robots.txt y sitemap.xml con la dirección pública del sitio. */
+function seoFiles(): Plugin {
+  return {
+    name: 'altaria-seo-files',
+    apply: 'build',
+    generateBundle() {
+      const today = new Date().toISOString().slice(0, 10)
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source: [
+          'User-agent: *',
+          'Allow: /',
+          'Disallow: /admin/',
+          'Disallow: /assets-src/',
+          '',
+          `Sitemap: ${SITE_URL}/sitemap.xml`,
+          '',
+        ].join('\n'),
+      })
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source: [
+          '<?xml version="1.0" encoding="UTF-8"?>',
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+          `  <url><loc>${SITE_URL}/</loc><lastmod>${today}</lastmod></url>`,
+          '</urlset>',
+          '',
+        ].join('\n'),
+      })
+    },
+  }
+}
+
+/**
+ * Pone la dirección pública en index.html (canonical, Open Graph, JSON-LD),
+ * precarga la imagen del hero (sus nombres llevan hash) y agrega la CSP.
+ */
 function siteHtml(): Plugin {
   return {
     name: 'altaria-site-html',
     transformIndexHtml: {
       order: 'post',
-      handler(_html, ctx) {
+      handler(html, ctx) {
         const content = JSON.parse(readFileSync('src/content/images.json', 'utf8'))
         const manifest = JSON.parse(readFileSync('src/generated/images.manifest.json', 'utf8'))
         const hero = manifest[content.hero.src] as { base: string; widths: number[] }
         const srcset = hero.widths.map((w) => `${hero.base}-${w}.webp ${w}w`).join(', ')
         const fallback = `${hero.base}-${hero.widths.find((w) => w >= 960) ?? hero.widths.at(-1)}.webp`
 
-        return [
+        const tags: HtmlTagDescriptor[] = [
           {
             tag: 'link',
             injectTo: 'head',
@@ -76,6 +121,8 @@ function siteHtml(): Plugin {
                 },
               ]),
         ]
+
+        return { html: html.replaceAll('__SITE_URL__', SITE_URL), tags }
       },
     },
   }
@@ -83,7 +130,7 @@ function siteHtml(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), siteHtml(), publishOriginals()],
+  plugins: [react(), siteHtml(), seoFiles(), publishOriginals()],
   build: {
     target: 'es2022',
     cssCodeSplit: true,
