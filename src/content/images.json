@@ -4,19 +4,19 @@
     "alt": "Fachada de Altaria de noche con techo de luces"
   },
   "aboutMain": {
-    "src": "assets-src/salon-interior.jpg",
+    "src": "assets-src/whatsapp-image-2026-11-08-at-10.09.34-pm.jpeg",
     "alt": "Salón principal de Altaria con cielo de tela blanca, corona floral y mesas montadas"
   },
   "aboutAccent": {
-    "src": "assets-src/escenario.jpg",
-    "alt": "Escenario con audio e iluminación profesional y letras iluminadas"
+    "src": "assets-src/whatsapp-image-2026-11-08-at-10.09.36-pm.jpeg",
+    "alt": "Montaje de mesas"
   },
   "experienceDecoration": {
-    "src": "assets-src/backdrop-floral.jpg",
-    "alt": "Backdrop de flores blancas y rosas con ramas y estructuras doradas junto a una silla capitonada blanca"
+    "src": "assets-src/whatsapp-image-2026-11-08-at-10.09.37-pm-1-.jpeg",
+    "alt": "Mesa de novios con decoración floral"
   },
   "experienceDesserts": {
-    "src": "assets-src/mesa-postres.jpg",
+    "src": "assets-src/whatsapp-image-2026-11-08-at-10.12.10-pm.jpeg",
     "alt": "Mesa de postres con cortinas rosas, cupcakes, tartaletas de fruta y donas sobre bases de madera"
   },
   "experienceShow": {
@@ -24,10 +24,30 @@
     "alt": "Mariachi en el escenario con luces, letras iluminadas EVE y corona floral en el techo del salón"
   },
   "quote": {
-    "src": "assets-src/cheesecakes.jpg",
+    "src": "assets-src/whatsapp-image-2026-11-08-at-10.15.18-pm.jpeg",
     "alt": ""
   },
   "gallery": [
+    {
+      "src": "assets-src/whatsapp-image-2026-11-08-at-10.34.19-pm.jpeg",
+      "alt": "Montaje de mesas",
+      "caption": "montaje de mesas"
+    },
+    {
+      "src": "assets-src/whatsapp-image-2026-11-08-at-10.09.37-pm-2-.jpeg",
+      "caption": "Montaje de mesa",
+      "alt": "Monataje de esa"
+    },
+    {
+      "src": "assets-src/whatsapp-image-2026-11-08-at-10.09.37-pm.jpeg",
+      "caption": "Decoracion floral",
+      "alt": "Decoracion floral para mesa de novios"
+    },
+    {
+      "src": "assets-src/whatsapp-image-2026-11-08-at-10.09.37-pm-3-.jpeg",
+      "caption": "Montaje de mesas",
+      "alt": "Montaje de mesa para boda"
+    },
     {
       "src": "assets-src/fachada-noche.jpg",
       "alt": "Fachada de Altaria de noche con techo de luces y letras iluminadas M y A",
