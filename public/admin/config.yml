@@ -19,9 +19,11 @@ site_url: https://altariaeventos.com
 display_url: https://altariaeventos.com
 logo_url: /logo-512.png
 
-# Dónde se guardan las fotos subidas (las originales; el build genera versiones optimizadas)
+# Dónde se guardan las fotos subidas (las originales; el build genera versiones optimizadas).
+# public_folder va SIN "/" inicial: Decap trata las rutas con "/" como URLs del sitio
+# publicado, y una foto recién subida aún no existe ahí (la vista previa sale rota).
 media_folder: assets-src
-public_folder: /assets-src
+public_folder: assets-src
 
 collections:
   - name: imagenes

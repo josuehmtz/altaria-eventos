@@ -1,70 +1,70 @@
 {
   "hero": {
-    "src": "/assets-src/fachada-noche.jpg",
+    "src": "assets-src/fachada-noche.jpg",
     "alt": "Fachada de Altaria de noche con techo de luces"
   },
   "aboutMain": {
-    "src": "/assets-src/salon-interior.jpg",
+    "src": "assets-src/salon-interior.jpg",
     "alt": "Salón principal de Altaria con cielo de tela blanca, corona floral y mesas montadas"
   },
   "aboutAccent": {
-    "src": "/assets-src/escenario.jpg",
+    "src": "assets-src/escenario.jpg",
     "alt": "Escenario con audio e iluminación profesional y letras iluminadas"
   },
   "experienceDecoration": {
-    "src": "/assets-src/backdrop-floral.jpg",
+    "src": "assets-src/backdrop-floral.jpg",
     "alt": "Backdrop de flores blancas y rosas con ramas y estructuras doradas junto a una silla capitonada blanca"
   },
   "experienceDesserts": {
-    "src": "/assets-src/mesa-postres.jpg",
+    "src": "assets-src/mesa-postres.jpg",
     "alt": "Mesa de postres con cortinas rosas, cupcakes, tartaletas de fruta y donas sobre bases de madera"
   },
   "experienceShow": {
-    "src": "/assets-src/pista-mariachi.jpg",
+    "src": "assets-src/pista-mariachi.jpg",
     "alt": "Mariachi en el escenario con luces, letras iluminadas EVE y corona floral en el techo del salón"
   },
   "quote": {
-    "src": "/assets-src/cheesecakes.jpg",
+    "src": "assets-src/cheesecakes.jpg",
     "alt": ""
   },
   "gallery": [
     {
-      "src": "/assets-src/fachada-noche.jpg",
+      "src": "assets-src/fachada-noche.jpg",
       "alt": "Fachada de Altaria de noche con techo de luces y letras iluminadas M y A",
       "caption": "Bienvenida bajo un cielo de luces"
     },
     {
-      "src": "/assets-src/salon-interior.jpg",
+      "src": "assets-src/salon-interior.jpg",
       "alt": "Interior del salón con cielo de tela, corona floral y mesas montadas con sillas de madera",
       "caption": "Salón principal"
     },
     {
-      "src": "/assets-src/backdrop-floral.jpg",
+      "src": "assets-src/backdrop-floral.jpg",
       "alt": "Backdrop floral con flores blancas y rosas y estructuras doradas",
       "caption": "Backdrop floral"
     },
     {
-      "src": "/assets-src/mesa-postres.jpg",
+      "src": "assets-src/mesa-postres.jpg",
       "alt": "Mesa de postres decorada con telas rosas",
       "caption": "Mesa de postres"
     },
     {
-      "src": "/assets-src/escenario.jpg",
+      "src": "assets-src/escenario.jpg",
       "alt": "Escenario con iluminación y audio profesional bajo una corona de flores",
       "caption": "Escenario y pista"
     },
     {
-      "src": "/assets-src/cheesecakes.jpg",
+      "src": "assets-src/cheesecakes.jpg",
       "alt": "Mini cheesecakes con moras azules y hojas de menta sobre bases doradas",
       "caption": "Mini cheesecakes"
     },
     {
-      "src": "/assets-src/pista-mariachi.jpg",
+      "src": "assets-src/pista-mariachi.jpg",
       "alt": "Mariachi tocando en el escenario del salón",
       "caption": "Música en vivo"
     },
     {
-      "src": "/assets-src/cake-pops.jpg",
+      "src": "assets-src/cake-pops.jpg",
       "alt": "Cake pops color rosa con chispas blancas",
       "caption": "Cake pops"
     }
