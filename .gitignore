@@ -32,5 +32,5 @@ public/images/
 public/og-image.jpg
 public/logo-512.png
 public/apple-touch-icon.png
-src/data/images.manifest.json
+src/generated/
 public/logo-640.webp

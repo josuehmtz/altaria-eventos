@@ -2,7 +2,7 @@
  * Optimiza las imágenes referenciadas en `src/content/images.json`
  * (el archivo que edita el panel /admin) y genera:
  *   - public/images/<nombre>-<hash>-<ancho>.webp  (versiones responsivas)
- *   - src/data/images.manifest.json               (dimensiones + placeholder)
+ *   - src/generated/images.manifest.json          (dimensiones + placeholder)
  *   - logo, apple-touch-icon e imagen para redes sociales
  *
  * El hash del contenido en el nombre permite caché inmutable: si se reemplaza
@@ -21,7 +21,7 @@ import sharp from 'sharp'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const contentPath = path.join(root, 'src', 'content', 'images.json')
 const outDir = path.join(root, 'public', 'images')
-const manifestPath = path.join(root, 'src', 'data', 'images.manifest.json')
+const manifestPath = path.join(root, 'src', 'generated', 'images.manifest.json')
 
 const WIDTHS = [480, 960, 1600]
 const QUALITY = 74
@@ -125,5 +125,6 @@ for (const f of await readdir(outDir)) {
   if (!keep.has(f)) await rm(path.join(outDir, f))
 }
 
+await mkdir(path.dirname(manifestPath), { recursive: true })
 await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
 console.log(`✓ ${sources.length} imágenes optimizadas → public/images`)

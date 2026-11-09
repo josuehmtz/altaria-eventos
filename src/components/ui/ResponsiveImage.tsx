@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
-import { imageMeta, type ImageRef } from '../../data/images'
-import { defaultSrc, srcSetFor } from '../../utils/images'
+import { defaultSrc, imageMeta, srcSetFor, type ImageRef } from '../../data/images'
 
 interface ResponsiveImageProps {
   image: ImageRef

@@ -3,7 +3,7 @@ node_modules
 public
 assets-src
 assets-brand
-src/data/images.manifest.json
+src/generated/
 package-lock.json
 # Contenido administrado desde /admin
 src/content

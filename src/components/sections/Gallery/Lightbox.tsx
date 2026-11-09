@@ -1,7 +1,6 @@
 import { useEffect, useRef, type KeyboardEvent, type TouchEvent } from 'react'
-import type { GalleryItem } from '../../data/images'
-import { largestSrc } from '../../utils/images'
-import { Icon } from '../ui/Icon'
+import { largestSrc, type GalleryItem } from '../../../data/images'
+import { Icon } from '../../ui/Icon'
 import styles from './Lightbox.module.css'
 
 interface LightboxProps {

@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /assets-src/
+
+Sitemap: https://altariaeventos.com/sitemap.xml

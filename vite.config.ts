@@ -47,7 +47,7 @@ function siteHtml(): Plugin {
       order: 'post',
       handler(_html, ctx) {
         const content = JSON.parse(readFileSync('src/content/images.json', 'utf8'))
-        const manifest = JSON.parse(readFileSync('src/data/images.manifest.json', 'utf8'))
+        const manifest = JSON.parse(readFileSync('src/generated/images.manifest.json', 'utf8'))
         const hero = manifest[content.hero.src] as { base: string; widths: number[] }
         const srcset = hero.widths.map((w) => `${hero.base}-${w}.webp ${w}w`).join(', ')
         const fallback = `${hero.base}-${hero.widths.find((w) => w >= 960) ?? hero.widths.at(-1)}.webp`

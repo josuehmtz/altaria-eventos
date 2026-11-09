@@ -33,17 +33,20 @@ scripts/optimize-images.mjs
 src/
   components/
     layout/              Header (menú móvil accesible), Footer
-    sections/            Hero, About, Events, Experience, Quote, Gallery + Lightbox, Process, Contact
+    sections/            Hero, About, Events, Experience, Quote, Process
+      Contact/           Contact + ContactForm
+      Gallery/           Gallery + Lightbox (visor)
     ui/                  ResponsiveImage, Reveal, SectionHeading, Ornament, Icon, Logo, WhatsAppFab
   content/
     images.json          🖼️  Qué foto va en cada sección y la galería (lo edita el panel)
   data/
     site.ts              ✏️  Textos, contacto, servicios, pasos
-    images.ts            Tipos y acceso a imágenes + manifiesto
-    images.manifest.json ⚙️  Generado (dimensiones, placeholder)
+    images.ts            Tipos, acceso a imágenes y rutas WebP (srcset)
+  generated/
+    images.manifest.json ⚙️  Generado por npm run images (no se versiona)
   hooks/                 useScrolled, useInView, useActiveSection
   styles/                tokens.css (paleta, tipografía, espaciado) y global.css
-  utils/                 WhatsApp, validación del formulario, rutas de imágenes
+  utils/                 WhatsApp y validación del formulario
 ```
 
 ## Cómo editar contenido
@@ -63,6 +66,12 @@ administrar la galería: subir, quitar, reordenar (arrastrando), y editar títul
 (foto original en `assets-src/` + cambios en `src/content/images.json`). Netlify detecta el commit,
 optimiza las fotos (WebP 480/960/1600 px), corre las verificaciones y publica en ~1–2 minutos.
 Si algo falla (p. ej. falta una descripción), no se publica y el sitio sigue como estaba.
+
+**Fotos sin usar:** al reemplazar o quitar una foto, el panel no borra la anterior. Después de cada
+cambio de `src/content/images.json`, GitHub Actions (`clean-images.yml`) elimina de `assets-src/`
+las fotos que ya no usa ninguna sección (quedan en el historial de git). Una foto subida a la
+biblioteca sin asignarla a ninguna sección se borra en el siguiente cambio de imágenes.
+Para revisarlo en local: `npm run images:clean -- --dry-run`.
 
 **Configuración inicial (una sola vez):**
 
@@ -87,7 +96,7 @@ y pulsa _Iniciar sesión con GitHub_.
 - **Accesibilidad:** HTML semántico, un solo `h1`, _skip link_, `aria-current` en la navegación, foco visible,
   menú móvil con Escape y gestión de foco, visor de galería con `<dialog>` nativo (trampa de foco y teclado),
   formulario con errores asociados (`aria-invalid`, `aria-describedby`), respeto a `prefers-reduced-motion`.
-- **SEO:** `lang="es-MX"`, meta description, Open Graph, datos estructurados `EventVenue` (JSON-LD), `robots.txt`, manifest.
+- **SEO:** `lang="es-MX"`, meta description, Open Graph, URL canónica, datos estructurados `EventVenue` (JSON-LD), `robots.txt`, `sitemap.xml`, manifest.
 - **Código:** TypeScript estricto, componentes pequeños, contenido separado de la presentación, CSS Modules + tokens, pruebas.
 
 ## Contacto / formulario

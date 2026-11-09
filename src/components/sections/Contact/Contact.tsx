@@ -1,8 +1,8 @@
-import { contact } from '../../data/site'
-import { whatsappUrl } from '../../utils/whatsapp'
-import { Icon, type IconName } from '../ui/Icon'
-import { Reveal } from '../ui/Reveal'
-import { SectionHeading } from '../ui/SectionHeading'
+import { contact } from '../../../data/site'
+import { whatsappUrl } from '../../../utils/whatsapp'
+import { Icon, type IconName } from '../../ui/Icon'
+import { Reveal } from '../../ui/Reveal'
+import { SectionHeading } from '../../ui/SectionHeading'
 import styles from './Contact.module.css'
 import { ContactForm } from './ContactForm'
 

@@ -1,0 +1,48 @@
+name: Limpieza de imágenes
+
+# Cuando el panel /admin cambia qué fotos se usan, borra de assets-src/
+# las que quedaron sin usar (Decap CMS no las elimina al reemplazarlas).
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/content/images.json
+  workflow_dispatch:
+
+concurrency:
+  group: clean-images
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    name: Eliminar fotos sin usar
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Buscar y eliminar fotos sin usar
+        run: node scripts/clean-orphan-images.mjs
+
+      - name: Guardar cambios
+        run: |
+          if git diff --quiet -- assets-src; then
+            echo "Nada que limpiar."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A assets-src
+          git commit -m "Limpieza: elimina fotos sin usar de assets-src"
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -1,5 +1,5 @@
 import content from '../content/images.json'
-import manifest from './images.manifest.json'
+import manifest from '../generated/images.manifest.json'
 
 /** Una imagen tal como la guarda el panel /admin en `src/content/images.json`. */
 export interface ImageRef {
@@ -39,4 +39,24 @@ export function imageMeta(src: string): ImageMeta {
   const meta = metaBySrc[src]
   if (!meta) throw new Error(`Imagen sin optimizar: ${src}. Ejecuta "npm run images".`)
   return meta
+}
+
+/** URL de la versión WebP de una imagen en un ancho dado. */
+export const imageUrl = (src: string, width: number) => `${imageMeta(src).base}-${width}.webp`
+
+export const srcSetFor = (src: string) =>
+  imageMeta(src)
+    .widths.map((w) => `${imageUrl(src, w)} ${w}w`)
+    .join(', ')
+
+/** Versión de mayor resolución disponible (para el visor de galería). */
+export function largestSrc(src: string) {
+  const { widths } = imageMeta(src)
+  return imageUrl(src, widths[widths.length - 1] ?? 960)
+}
+
+/** Versión mediana para el atributo `src` de respaldo. */
+export function defaultSrc(src: string) {
+  const { widths } = imageMeta(src)
+  return imageUrl(src, widths.find((w) => w >= 960) ?? widths[widths.length - 1] ?? 960)
 }

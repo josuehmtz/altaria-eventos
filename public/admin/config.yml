@@ -15,8 +15,8 @@ backend:
 local_backend: true
 
 locale: es
-site_url: https://altaria-eventos.netlify.app
-display_url: https://altaria-eventos.netlify.app
+site_url: https://altariaeventos.com
+display_url: https://altariaeventos.com
 logo_url: /logo-512.png
 
 # Dónde se guardan las fotos subidas (las originales; el build genera versiones optimizadas)
