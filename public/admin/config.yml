@@ -2,14 +2,31 @@
 # Cada cambio guardado en el panel se convierte en un commit en GitHub;
 # Netlify lo detecta, optimiza las imágenes, verifica y publica (≈1–2 min).
 
+# Inicio de sesión con DecapBridge (https://decapbridge.com): los colaboradores entran
+# con Google, Microsoft o correo, sin cuenta de GitHub. Se invitan y se quitan desde
+# DecapBridge → Manage collaborators. DecapBridge escribe en GitHub con un token
+# fine-grained (solo este repositorio, Contents: read/write) que se guarda allá.
 backend:
-  name: github
+  name: git-gateway
   repo: josuehmtz/altaria-eventos
   branch: main
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/6cedc3bb-2fd1-4794-8b09-33db19c45be1/pkce
+  auth_token_endpoint: /sites/6cedc3bb-2fd1-4794-8b09-33db19c45be1/token
+  gateway_url: https://gateway.decapbridge.com
+  # Registra en el historial quién hizo cada cambio
   commit_messages:
-    update: 'Admin: actualiza {{collection}}'
-    uploadMedia: 'Admin: sube imagen {{path}}'
-    deleteMedia: 'Admin: elimina imagen {{path}}'
+    update: 'Admin: actualiza {{collection}} — {{author-name}} <{{author-login}}>'
+    uploadMedia: 'Admin: sube imagen {{path}} — {{author-name}} <{{author-login}}>'
+    deleteMedia: 'Admin: elimina imagen {{path}} — {{author-name}} <{{author-login}}>'
+
+# Datos del usuario que entrega DecapBridge al iniciar sesión (nombre, correo, foto)
+auth:
+  email_claim: email
+  first_name_claim: first_name
+  last_name_claim: last_name
+  avatar_url_claim: avatar_url
 
 # Permite probar el panel en local con `npm run cms` (no aplica en producción)
 local_backend: true

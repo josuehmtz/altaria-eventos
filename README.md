@@ -57,7 +57,8 @@ src/
 
 ## Panel de administración de imágenes (/admin)
 
-https://altaria-eventos.netlify.app/admin/ — basado en [Decap CMS](https://decapcms.org).
+https://altariaeventos.com/admin/ — basado en [Decap CMS](https://decapcms.org), con inicio de sesión
+de [DecapBridge](https://decapbridge.com) (Google, Microsoft o correo; no hace falta cuenta de GitHub).
 
 Permite cambiar la foto de cada sección (portada, nosotros, experiencia, fondo de la frase) y
 administrar la galería: subir, quitar, reordenar (arrastrando), y editar título y descripción.
@@ -73,18 +74,16 @@ las fotos que ya no usa ninguna sección (quedan en el historial de git). Una fo
 biblioteca sin asignarla a ninguna sección se borra en el siguiente cambio de imágenes.
 Para revisarlo en local: `npm run images:clean -- --dry-run`.
 
-**Configuración inicial (una sola vez):**
+**Acceso (DecapBridge):** el sitio está dado de alta en DecapBridge con _Auth type: PKCE_ y
+_Login URL_ `https://altariaeventos.com/admin/index.html` (debe ser el dominio principal: si el login
+empieza en otra dirección y Netlify redirige, falla). DecapBridge escribe en GitHub con un token
+_fine-grained_ (solo este repositorio, _Contents: Read and write_) guardado allá; si el token vence, el
+panel deja de guardar hasta que se genere otro y se pegue en DecapBridge.
 
-1. En GitHub → _Settings → Developer settings → OAuth Apps → New OAuth App_:
-   - Homepage URL: `https://altaria-eventos.netlify.app`
-   - Authorization callback URL: `https://api.netlify.com/auth/done`
-2. Copia el _Client ID_ y genera un _Client secret_.
-3. En Netlify → _Project configuration → Access & security → OAuth → Install provider_ → GitHub,
-   pega el Client ID y el Client secret.
-
-**Dar acceso a otra persona:** necesita una cuenta gratuita de GitHub y ser agregada como
-colaboradora del repositorio (_Settings → Collaborators_, permiso _Write_). Después entra a /admin
-y pulsa _Iniciar sesión con GitHub_.
+**Dar acceso a otra persona:** en DecapBridge → _Manage collaborators_, invítala con el correo de la
+cuenta de Google con la que va a entrar. Recibe un enlace para activar su acceso; luego entra a
+/admin y pulsa _Iniciar sesión_. Desde la misma pantalla se le quita el acceso. Cada commit del panel
+registra el nombre de quien hizo el cambio.
 
 **Probar el panel en local:** `npm run cms` en una terminal y `npm run dev` en otra; abre
 `http://localhost:5173/admin/index.html`. Los cambios se escriben en tus archivos locales.
