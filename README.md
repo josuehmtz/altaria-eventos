@@ -29,7 +29,7 @@ assets-src/              Fotografías originales (aquí sube el panel /admin; se
 assets-brand/            Logo original (fuera de la biblioteca del panel)
 public/admin/            Panel de administración (Decap CMS): index.html + config.yml
 public/images/           ⚙️  WebP generados con hash (no se versionan)
-scripts/optimize-images.mjs
+scripts/optimize-images.ts
 src/
   components/
     layout/              Header (menú móvil accesible), Footer
@@ -45,7 +45,7 @@ src/
   generated/
     images.manifest.json ⚙️  Generado por npm run images (no se versiona)
   hooks/                 useScrolled, useInView, useActiveSection
-  styles/                tokens.css (paleta, tipografía, espaciado) y global.css
+  styles/global.css      🎨 Tailwind: tema (paleta, tipografía, espaciado), base y utilidades propias
   utils/                 WhatsApp y validación del formulario
 ```
 
@@ -53,7 +53,7 @@ src/
 
 - **Fotos y galería:** desde el panel **/admin** (ver abajo).
 - **Textos, teléfono, dirección, servicios:** `src/data/site.ts`.
-- **Colores y tipografía:** `src/styles/tokens.css`.
+- **Colores y tipografía:** el bloque `@theme` de `src/styles/global.css` (Tailwind CSS v4).
 
 ## Panel de administración de imágenes (/admin)
 

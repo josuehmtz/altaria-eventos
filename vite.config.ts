@@ -1,5 +1,6 @@
 /// <reference types="vitest/config" />
 import { cpSync, readFileSync } from 'node:fs'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
 
@@ -130,7 +131,7 @@ function siteHtml(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), siteHtml(), seoFiles(), publishOriginals()],
+  plugins: [react(), tailwindcss(), siteHtml(), seoFiles(), publishOriginals()],
   build: {
     target: 'es2022',
     cssCodeSplit: true,
@@ -138,7 +139,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    css: { modules: { classNameStrategy: 'non-scoped' } },
     restoreMocks: true,
   },
 })

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { Ornament } from './Ornament'
-import styles from './SectionHeading.module.css'
 
 interface SectionHeadingProps {
   id?: string
@@ -8,7 +7,10 @@ interface SectionHeadingProps {
   title: ReactNode
   intro?: ReactNode
   align?: 'center' | 'start'
+  /** `dark` para secciones con fondo negro */
   tone?: 'light' | 'dark'
+  /** Margen inferior (por defecto separa el encabezado del contenido de la sección) */
+  className?: string
 }
 
 export function SectionHeading({
@@ -18,15 +20,24 @@ export function SectionHeading({
   intro,
   align = 'center',
   tone = 'light',
+  className = 'mb-12',
 }: SectionHeadingProps) {
+  const dark = tone === 'dark'
   return (
-    <header className={styles.heading} data-align={align} data-tone={tone}>
-      <p className={styles.eyebrow}>{eyebrow}</p>
-      <h2 id={id} className={styles.title}>
+    <header
+      className={`grid max-w-[680px] gap-4 ${align === 'center' ? 'mx-auto justify-items-center text-center' : ''} ${className}`}
+    >
+      <p className={`eyebrow ${dark ? 'text-gold' : 'text-gold-deep'}`}>{eyebrow}</p>
+      <h2
+        id={id}
+        className={`text-2xl [&_em]:italic ${dark ? 'text-fg-inverse [&_em]:text-gold' : '[&_em]:text-gold-deep'}`}
+      >
         {title}
       </h2>
-      <Ornament className={styles.ornament} />
-      {intro && <p className={styles.intro}>{intro}</p>}
+      <Ornament />
+      {intro && (
+        <p className={`text-lg ${dark ? 'text-fg-inverse-muted' : 'text-fg-muted'}`}>{intro}</p>
+      )}
     </header>
   )
 }

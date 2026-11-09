@@ -32,7 +32,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Buscar y eliminar fotos sin usar
-        run: node scripts/clean-orphan-images.mjs
+        run: node scripts/clean-orphan-images.ts
 
       - name: Guardar cambios
         run: |

@@ -13,18 +13,18 @@
  */
 import { readFile, readdir, rm } from 'node:fs/promises'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const root = path.resolve(import.meta.dirname, '..')
 const contentPath = path.join(root, 'src', 'content', 'images.json')
 const originalsDir = path.join(root, 'assets-src')
 const dryRun = process.argv.includes('--dry-run')
 
 /** Recorre el JSON y devuelve todas las rutas `src` de imágenes. */
-function collectSources(node, found = new Set()) {
+function collectSources(node: unknown, found = new Set<string>()): Set<string> {
   if (Array.isArray(node)) node.forEach((n) => collectSources(n, found))
   else if (node && typeof node === 'object') {
-    if (typeof node.src === 'string' && node.src) found.add(node.src)
+    const { src } = node as { src?: unknown }
+    if (typeof src === 'string' && src) found.add(src)
     Object.values(node).forEach((n) => collectSources(n, found))
   }
   return found

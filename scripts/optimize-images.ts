@@ -15,10 +15,9 @@ import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const root = path.resolve(import.meta.dirname, '..')
 const contentPath = path.join(root, 'src', 'content', 'images.json')
 const outDir = path.join(root, 'public', 'images')
 const manifestPath = path.join(root, 'src', 'generated', 'images.manifest.json')
@@ -27,16 +26,17 @@ const WIDTHS = [480, 960, 1600]
 const QUALITY = 74
 
 /** Recorre el JSON y devuelve todas las rutas `src` de imágenes. */
-function collectSources(node, found = new Set()) {
+function collectSources(node: unknown, found = new Set<string>()): Set<string> {
   if (Array.isArray(node)) node.forEach((n) => collectSources(n, found))
   else if (node && typeof node === 'object') {
-    if (typeof node.src === 'string' && node.src) found.add(node.src)
+    const { src } = node as { src?: unknown }
+    if (typeof src === 'string' && src) found.add(src)
     Object.values(node).forEach((n) => collectSources(n, found))
   }
   return found
 }
 
-const slugify = (s) =>
+const slugify = (s: string) =>
   s
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
@@ -45,7 +45,8 @@ const slugify = (s) =>
     .replace(/^-|-$/g, '')
     .slice(0, 48) || 'imagen'
 
-const content = JSON.parse(await readFile(contentPath, 'utf8'))
+/** Lo que guarda el panel /admin; aquí solo importa la foto de portada */
+const content = JSON.parse(await readFile(contentPath, 'utf8')) as { hero: { src: string } }
 const sources = [...collectSources(content)]
 
 const missing = sources.filter((src) => !existsSync(path.join(root, src)))
@@ -55,8 +56,16 @@ if (missing.length) {
 }
 
 await mkdir(outDir, { recursive: true })
-const manifest = {}
-const keep = new Set()
+interface ImageMeta {
+  base: string
+  width: number
+  height: number
+  widths: number[]
+  placeholder: string
+}
+
+const manifest: Record<string, ImageMeta> = {}
+const keep = new Set<string>()
 
 for (const src of sources) {
   const file = path.join(root, src)
@@ -70,6 +79,7 @@ for (const src of sources) {
   const swap = (meta.orientation ?? 1) >= 5
   const width = swap ? meta.height : meta.width
   const height = swap ? meta.width : meta.height
+  if (!width || !height) throw new Error(`No se pudieron leer las dimensiones de ${src}`)
 
   const widths = [...new Set(WIDTHS.filter((w) => w < width).concat(Math.min(width, 1600)))].sort(
     (a, b) => a - b,
